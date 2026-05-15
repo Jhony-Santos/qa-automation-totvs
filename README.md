@@ -1,41 +1,200 @@
-import pytest
-from playwright.sync_api import sync_playwright
+# QA Automation Challenge - TOTVS
 
+## Overview
 
-@pytest.fixture(scope="function")
-def page(request):
-with sync_playwright() as p:
-browser = p.chromium.launch(
-headless=False,
-slow_mo=300
-)
+This project was developed as part of the QA Automation Technical Challenge.
 
-        context = browser.new_context(
-            ignore_https_errors=True
-        )
+The objective is to validate the ability to design and implement a resilient and scalable automation framework using:
 
-        context.set_default_timeout(60000)
-        context.set_default_navigation_timeout(60000)
+- Python 3.12
+- Playwright
+- Pytest
+- Page Object Model (POM)
+- Clean Code principles
 
-        page = context.new_page()
+---
 
-        page.set_viewport_size({
-            "width": 1440,
-            "height": 900
-        })
+## Technologies
 
-        yield page
+- Python 3.12
+- Playwright
+- Pytest
+- Requests
+- Faker
+- Pytest HTML Report
 
-        if request.node.rep_call.failed:
-            screenshot_name = f"screenshots/{request.node.name}.png"
-            page.screenshot(path=screenshot_name, full_page=True)
+---
 
-        browser.close()
+## Architecture
 
+The project follows the Page Object Model (POM) pattern.
 
-@pytest.hookimpl(hookwrapper=True)
-def pytest_runtest_makereport(item, call):
-outcome = yield
-rep = outcome.get_result()
+### Project Structure
 
-    setattr(item, "rep_" + rep.when, rep)
+```txt
+qa-automation-totvs/
+│
+├── api/
+│   └── products_api.py
+│
+├── pages/
+│   ├── base_page.py
+│   ├── cart_page.py
+│   ├── home_page.py
+│   ├── products_page.py
+│   └── signup_page.py
+│
+├── tests/
+│   ├── test_inventory_cart.py
+│   ├── test_products_api.py
+│   └── test_register_user.py
+│
+├── utils/
+│   └── data_factory.py
+│
+├── reports/
+├── screenshots/
+│
+├── conftest.py
+├── pytest.ini
+├── requirements.txt
+└── README.md
+```
+
+---
+
+## Implemented Scenarios
+
+### Web Automation
+
+#### User Registration E2E
+
+- Access website
+- Navigate to signup page
+- Fill registration form using dynamic data
+- Create account
+- Validate success message
+
+#### Inventory / Cart Validation
+
+- Access products page
+- Open product details
+- Add 4 units to cart
+- Validate quantity
+- Validate total price
+
+---
+
+## API Automation
+
+### GET /api/productsList
+
+Validations:
+- Status Code 200
+- Response body is not null
+- Products list exists
+- Products list is not empty
+- Product fields contain valid values
+
+---
+
+## Features
+
+- Dynamic test data generation
+- Screenshot capture on failure
+- HTML report generation
+- Reusable methods
+- Stable locators
+- No fixed waits
+
+---
+
+## Installation
+
+### Clone repository
+
+```bash
+git clone https://github.com/Jhony-Santos/qa-automation-totvs.git
+```
+
+### Access project
+
+```bash
+cd qa-automation-totvs
+```
+
+### Create virtual environment
+
+```bash
+python -m venv .venv
+```
+
+Activate:
+
+```bash
+.venv\Scripts\activate
+```
+
+---
+
+## Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## Install Playwright browsers
+
+```bash
+playwright install
+```
+
+---
+
+## Running Tests
+
+### Run all tests
+
+```bash
+pytest
+```
+
+### Run web tests
+
+```bash
+pytest tests/test_register_user.py
+```
+
+```bash
+pytest tests/test_inventory_cart.py
+```
+
+### Run API tests
+
+```bash
+pytest tests/test_products_api.py
+```
+
+---
+
+## Reports
+
+HTML reports are generated inside:
+
+```txt
+reports/
+```
+
+Screenshots on failure are generated inside:
+
+```txt
+screenshots/
+```
+
+---
+
+## Author
+
+Jhonatan Santos
