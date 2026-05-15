@@ -9,8 +9,18 @@ class CartPage(BasePage):
     PRODUCT_QUANTITY = ".cart_quantity button"
     PRODUCT_TOTAL = ".cart_total_price"
 
+    def validate_product_name(self, expected_name):
+        expect(self.page.locator(self.PRODUCT_NAME)).to_have_text(expected_name)
+
     def validate_product_quantity(self, expected_quantity):
         expect(self.page.locator(self.PRODUCT_QUANTITY)).to_have_text(str(expected_quantity))
+
+    def validate_unit_price(self, expected_price):
+        actual_price = self.get_unit_price()
+
+        assert actual_price == expected_price, (
+            f"Expected unit price {expected_price}, but got {actual_price}"
+        )
 
     def get_unit_price(self):
         price_text = self.page.locator(self.PRODUCT_PRICE).inner_text()
@@ -20,10 +30,9 @@ class CartPage(BasePage):
         total_text = self.page.locator(self.PRODUCT_TOTAL).inner_text()
         return self._convert_price_to_number(total_text)
 
-    def validate_total_price(self, expected_quantity):
-        unit_price = self.get_unit_price()
+    def validate_total_price(self, expected_unit_price, expected_quantity):
         actual_total = self.get_total_price()
-        expected_total = unit_price * expected_quantity
+        expected_total = expected_unit_price * expected_quantity
 
         assert actual_total == expected_total, (
             f"Expected total price {expected_total}, but got {actual_total}"

@@ -28,9 +28,11 @@ class SignupPage(BasePage):
     CREATE_ACCOUNT_BUTTON = "button[data-qa='create-account']"
 
     ACCOUNT_CREATED_MESSAGE = "ACCOUNT CREATED!"
+    CONTINUE_BUTTON = "a[data-qa='continue-button']"
+    DELETE_ACCOUNT_BUTTON = "a[href='/delete_account']"
+    ACCOUNT_DELETED_MESSAGE = "ACCOUNT DELETED!"
 
     def start_signup(self, user):
-
         self.fill(self.NAME_INPUT, user["name"])
         self.fill(self.EMAIL_INPUT, user["email"])
 
@@ -39,7 +41,6 @@ class SignupPage(BasePage):
         self.wait_for_visible(self.GENDER_MALE)
 
     def fill_account_information(self, user):
-
         self.click(self.GENDER_MALE)
 
         self.fill(self.PASSWORD_INPUT, user["password"])
@@ -49,7 +50,6 @@ class SignupPage(BasePage):
         self.page.locator(self.YEAR_SELECT).select_option("1995")
 
     def fill_address_information(self, user):
-
         self.fill(self.FIRST_NAME_INPUT, user["first_name"])
         self.fill(self.LAST_NAME_INPUT, user["last_name"])
 
@@ -63,9 +63,16 @@ class SignupPage(BasePage):
         self.fill(self.MOBILE_INPUT, user["mobile_number"])
 
     def create_account(self):
-
         self.click(self.CREATE_ACCOUNT_BUTTON)
 
     def validate_account_created(self):
-
         self.text_visible(self.ACCOUNT_CREATED_MESSAGE)
+
+    def continue_after_account_created(self):
+        self.click(self.CONTINUE_BUTTON)
+
+    def delete_account(self):
+        self.click(self.DELETE_ACCOUNT_BUTTON)
+
+    def validate_account_deleted(self):
+        self.text_visible(self.ACCOUNT_DELETED_MESSAGE)
