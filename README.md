@@ -4,11 +4,11 @@ from playwright.sync_api import sync_playwright
 
 @pytest.fixture(scope="function")
 def page(request):
-    with sync_playwright() as p:
-        browser = p.chromium.launch(
-            headless=False,
-            slow_mo=300
-        )
+with sync_playwright() as p:
+browser = p.chromium.launch(
+headless=False,
+slow_mo=300
+)
 
         context = browser.new_context(
             ignore_https_errors=True
@@ -35,7 +35,7 @@ def page(request):
 
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
-    outcome = yield
-    rep = outcome.get_result()
+outcome = yield
+rep = outcome.get_result()
 
     setattr(item, "rep_" + rep.when, rep)
